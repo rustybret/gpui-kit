@@ -47,6 +47,7 @@ pub fn embedded_themes() -> HashMap<&'static str, &'static str> {
         include_str!("../../../themes/tokyonight.json"),
     );
     themes.insert("twilight", include_str!("../../../themes/twilight.json"));
+    themes.insert("workbench", include_str!("../../../themes/workbench.json"));
 
     themes
 }

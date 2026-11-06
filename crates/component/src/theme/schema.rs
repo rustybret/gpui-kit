@@ -1320,6 +1320,27 @@ mod tests {
     }
 
     #[test]
+    fn test_workbench_theme_applies_in_both_modes() {
+        let theme_set =
+            serde_json::from_str::<ThemeSet>(include_str!("../../../../themes/workbench.json"))
+                .unwrap();
+        assert_eq!(theme_set.themes.len(), 2);
+
+        for config in &theme_set.themes {
+            let mut theme = Theme::default();
+            theme.apply_config(&std::rc::Rc::new(config.clone()));
+
+            assert_eq!(theme.mode, config.mode);
+            assert_eq!(theme.radius, px(4.));
+            assert_eq!(theme.radius_lg, px(8.));
+            // The accent is spent on selection and focus, never on the primary button.
+            assert_eq!(theme.ring, theme.list_active_border);
+            assert_ne!(theme.ring, theme.primary);
+            assert_eq!(theme.highlight_theme.appearance, config.mode);
+        }
+    }
+
+    #[test]
     fn test_apply_config_clamps_highlight_alpha_per_gradient_stop() {
         let config = serde_json::from_value::<ThemeConfig>(serde_json::json!({
             "name": "Highlight",
